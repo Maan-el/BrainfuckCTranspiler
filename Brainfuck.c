@@ -9,10 +9,10 @@ void checkFile(FILE *nome, char *mensagem) {
   }
 }
 
-/*Escrever o \n manualmente deixa o cdigo feio********************************/
+/*Escrever o \n manualmente e chato ******************************************/
 void escreveArq(FILE *input, char *texto) { fprintf(input, "%s\n", texto); }
 
-/*Base do arquivo*************************************************************/
+/*Base do arquivo ************************************************************/
 void boilerplate(FILE *out) {
   escreveArq(out, "#include <stdio.h>");
   escreveArq(out, "");
@@ -20,7 +20,7 @@ void boilerplate(FILE *out) {
   escreveArq(out, "int arr[30000];");
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
   FILE *input = fopen("bainfuck", "r");
   checkFile(input, "Arquivo nao encontrado");
 
