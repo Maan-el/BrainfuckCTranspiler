@@ -22,6 +22,15 @@ void boilerplate(FILE *arqOut) {
   escreveArq(arqOut, "");
 }
 
+/*Fim do arquivo *************************************************************/
+void boilerplate2(FILE *arqOut) {
+  escreveArq(arqOut, "");
+  escreveArq(arqOut, "return 0;");
+  escreveArq(arqOut, "}");
+}
+
+// TODO Arrummar duplicaçao de codigo no arquivo final
+
 void escrevendo(char ch, FILE *arqOut) {
   if (ch == '+') {
     escreveArq(arqOut, "arr[ctr]++;");
@@ -45,6 +54,8 @@ void escrevendo(char ch, FILE *arqOut) {
 }
 
 int main(int argc, char *argv[]) {
+  char c;
+
   FILE *input = fopen(argv[1], "r");
   checkFile(input, "Arquivo nao encontrado");
 
@@ -53,17 +64,14 @@ int main(int argc, char *argv[]) {
 
   boilerplate(out);
 
-  char c;
   while (!feof(input)) {
     c = fgetc(input);
     escrevendo(c, out);
   }
 
-  escreveArq(out, "");
-  escreveArq(out, "return 0;");
-  escreveArq(out, "}");
-
   fclose(input);
+
+  boilerplate2(out);
   fclose(out);
 
   return 0;
