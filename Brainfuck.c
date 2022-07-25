@@ -18,7 +18,7 @@ void boilerplate(FILE *arqOut) {
   escreveArq(arqOut, "");
   escreveArq(arqOut, "int main (void) {");
   escreveArq(arqOut, "int arr[30000];");
-  escreveArq(arqOut, "int ptr = 0;");
+  escreveArq(arqOut, "int ctr = 0;");
 }
 
 int main(int argc, char *argv[]) {
@@ -34,13 +34,17 @@ int main(int argc, char *argv[]) {
   while (!feof(input)) {
     c = fgetc(input);
     if (c == '+') {
-      escreveArq(out, "arr[ptr]++;");
+      escreveArq(out, "arr[ctr]++;");
     } else if (c == '>') {
-      escreveArq(out, "ptr++;");
+      escreveArq(out, "ctr++;");
     } else if (c == '<') {
-      escreveArq(out, "ptr--");
+      escreveArq(out, "ctr--;");
     } else if (c == '-') {
-      escreveArq(out, "arr[ptr]--;");
+      escreveArq(out, "arr[ctr]--;");
+    } else if (c == '[') {
+      escreveArq(out, "while (arr[ctr] != 0) {");
+    } else if (c == ']') {
+      escreveArq(out, "}");
     }
   }
 
