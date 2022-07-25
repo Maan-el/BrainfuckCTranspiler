@@ -2,56 +2,67 @@
 #include <stdlib.h>
 #include <string.h>
 
-void checkFile(FILE *nome, char *mensagem) {
-  if (nome == NULL) {
+/*Metade do limite de um array de branfuck ***********************************/
+int MIDDLE = 15000;
+int OPENINGERROR = 1;
+
+/*Escrever o \n manualmente e chato ******************************************/
+void WRITEFILE(FILE *arq, char *texto) { fprintf(arq, "%s\n", texto); }
+
+/*Testa se o arquivo abriu sem nenhum problema *******************************/
+void checkFile(FILE *arq, char *mensagem) {
+  if (arq == NULL) {
     fprintf(stderr, "%s\n", mensagem);
-    exit(1);
+    exit(OPENINGERROR);
   }
 }
 
-/*Escrever o \n manualmente e chato ******************************************/
-void escreveArq(FILE *input, char *texto) { fprintf(input, "%s\n", texto); }
-
 /*Base do arquivo ************************************************************/
-void boilerplate(FILE *arqOut) {
-  escreveArq(arqOut, "#include <stdio.h>");
-  escreveArq(arqOut, "");
-  escreveArq(arqOut, "int main (void) {");
-  escreveArq(arqOut, "int arr[30000];");
-  escreveArq(arqOut, "int ctr = 0;");
-  escreveArq(arqOut, "char letra;");
-  escreveArq(arqOut, "");
-  escreveArq(arqOut, "arr[0] = 0;");
+void boilerplate(FILE *arq_out) {
+  WRITEFILE(arq_out, "#include <stdio.h>");
+  WRITEFILE(arq_out, "");
+  WRITEFILE(arq_out, "int main (void) {");
+  WRITEFILE(arq_out, "int arr[30000];");
+  WRITEFILE(arq_out, "int ctr = 0;");
+  WRITEFILE(arq_out, "char letra;");
+  WRITEFILE(arq_out, "");
+  WRITEFILE(arq_out, "arr[0] = 0;");
 }
 
 /*Fim do arquivo *************************************************************/
-void boilerplate2(FILE *arqOut) {
-  escreveArq(arqOut, "");
-  escreveArq(arqOut, "return 0;");
-  escreveArq(arqOut, "}");
+void boilerplate2(FILE *arq_out) {
+  WRITEFILE(arq_out, "");
+  WRITEFILE(arq_out, "return 0;");
+  WRITEFILE(arq_out, "}");
 }
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
+int arrSize(FILE *arq_in) {
+  int size, size_max, size_min, max;
+  size = MIDDLE;
 
-void escrevendo(char ch, FILE *arqOut) {
+  return max;
+}
+
+void escrevendo(char ch, FILE *arq_out) {
   if (ch == '+') {
-    escreveArq(arqOut, "arr[ctr]++;");
+    WRITEFILE(arq_out, "arr[ctr]++;");
   } else if (ch == '>') {
-    escreveArq(arqOut, "ctr++;");
+    WRITEFILE(arq_out, "ctr++;");
   } else if (ch == '<') {
-    escreveArq(arqOut, "ctr--;");
+    WRITEFILE(arq_out, "ctr--;");
   } else if (ch == '-') {
-    escreveArq(arqOut, "arr[ctr]--;");
+    WRITEFILE(arq_out, "arr[ctr]--;");
   } else if (ch == '[') {
-    escreveArq(arqOut, "");
-    escreveArq(arqOut, "while (arr[ctr] != 0) {");
+    WRITEFILE(arq_out, "");
+    WRITEFILE(arq_out, "while (arr[ctr] != 0) {");
   } else if (ch == ']') {
-    escreveArq(arqOut, "}");
-    escreveArq(arqOut, "");
+    WRITEFILE(arq_out, "}");
+    WRITEFILE(arq_out, "");
   } else if (ch == '.') {
-    escreveArq(arqOut, "letra = arr[ctr];");
-    escreveArq(arqOut, "printf(\"%c\", letra);");
-    escreveArq(arqOut, "letra = 'a' - 'a';");
+    WRITEFILE(arq_out, "letra = arr[ctr];");
+    WRITEFILE(arq_out, "printf(\"%c\", letra);");
+    WRITEFILE(arq_out, "letra = 'a' - 'a';");
   }
 }
 
@@ -66,7 +77,7 @@ int main(int argc, char *argv[]) {
 
   boilerplate(out);
 
-  // A maior parte da logica reside nesta funçao
+  // A maior parte da logica reside neste loop
 
   while (!feof(input)) {
     c = fgetc(input);
