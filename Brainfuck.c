@@ -34,7 +34,13 @@ int main(int argc, char *argv[]) {
   while (!feof(input)) {
     c = fgetc(input);
     if (c == '+') {
+      escreveArq(out, "arr[ptr]++;");
+    } else if (c == '>') {
       escreveArq(out, "ptr++;");
+    } else if (c == '<') {
+      escreveArq(out, "ptr--");
+    } else if (c == '-') {
+      escreveArq(out, "arr[ptr]--;");
     }
   }
 
