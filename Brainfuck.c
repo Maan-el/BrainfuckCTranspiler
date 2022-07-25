@@ -13,21 +13,30 @@ void checkFile(FILE *nome, char *mensagem) {
 void escreveArq(FILE *input, char *texto) { fprintf(input, "%s\n", texto); }
 
 /*Base do arquivo ************************************************************/
-void boilerplate(FILE *out) {
-  escreveArq(out, "#include <stdio.h>");
-  escreveArq(out, "");
-  escreveArq(out, "int main (void) {");
-  escreveArq(out, "int arr[30000];");
+void boilerplate(FILE *arqOut) {
+  escreveArq(arqOut, "#include <stdio.h>");
+  escreveArq(arqOut, "");
+  escreveArq(arqOut, "int main (void) {");
+  escreveArq(arqOut, "int arr[30000];");
+  escreveArq(arqOut, "int ptr = 0;");
 }
 
 int main(int argc, char *argv[]) {
-  FILE *input = fopen("bainfuck", "r");
+  FILE *input = fopen(argv[1], "r");
   checkFile(input, "Arquivo nao encontrado");
 
   FILE *out = fopen("output.c", "w");
   checkFile(out, "Erro ao criar o arquivo");
 
   boilerplate(out);
+
+  char c;
+  while (!feof(input)) {
+    c = fgetc(input);
+    if (c == '+') {
+      escreveArq(out, "ptr++;");
+    }
+  }
 
   fclose(input);
   fclose(out);
