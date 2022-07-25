@@ -1,1 +1,1 @@
-# BrainfugCTranspiler
+# BrainfuckCTranspiler
