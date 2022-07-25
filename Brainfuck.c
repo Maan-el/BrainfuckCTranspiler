@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,13 +37,19 @@ void boilerplate2(FILE *arq_out) {
   WRITEFILE(arq_out, "}");
 }
 
-// TODO Arrummar duplicaçao de codigo no arquivo final
-int arrSize(FILE *arq_in) {
-  int size, size_max, size_min, max;
-  size = MIDDLE;
+int sizeofFile(FILE *arquivo) {
+  int size, safesize;
 
-  return max;
+  while (!feof(arquivo)) {
+    size++;
+  }
+
+  // Tamanho incluindo o \n e o \0
+  safesize = size + 2;
+  return safesize;
 }
+
+// TODO Arrummar duplicaçao de codigo no arquivo final
 
 void escrevendo(char ch, FILE *arq_out) {
   if (ch == '+') {
