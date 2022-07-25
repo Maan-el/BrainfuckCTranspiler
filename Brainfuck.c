@@ -17,8 +17,31 @@ void boilerplate(FILE *arqOut) {
   escreveArq(arqOut, "#include <stdio.h>");
   escreveArq(arqOut, "");
   escreveArq(arqOut, "int main (void) {");
-  escreveArq(arqOut, "int arr[30000];");
-  escreveArq(arqOut, "int ctr = 0;");
+  escreveArq(arqOut, "int arr[30000], ctr;");
+  escreveArq(arqOut, "char letra;");
+  escreveArq(arqOut, "");
+}
+
+void escrevendo(char ch, FILE *arqOut) {
+  if (ch == '+') {
+    escreveArq(arqOut, "arr[ctr]++;");
+  } else if (ch == '>') {
+    escreveArq(arqOut, "ctr++;");
+  } else if (ch == '<') {
+    escreveArq(arqOut, "ctr--;");
+  } else if (ch == '-') {
+    escreveArq(arqOut, "arr[ctr]--;");
+  } else if (ch == '[') {
+    escreveArq(arqOut, "");
+    escreveArq(arqOut, "while (arr[ctr] != 0) {");
+  } else if (ch == ']') {
+    escreveArq(arqOut, "}");
+    escreveArq(arqOut, "");
+  } else if (ch == '.') {
+    escreveArq(arqOut, "letra = arr[ctr];");
+    escreveArq(arqOut, "printf(\"%c\", letra);");
+    escreveArq(arqOut, "letra = 'a' - 'a';");
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -33,20 +56,12 @@ int main(int argc, char *argv[]) {
   char c;
   while (!feof(input)) {
     c = fgetc(input);
-    if (c == '+') {
-      escreveArq(out, "arr[ctr]++;");
-    } else if (c == '>') {
-      escreveArq(out, "ctr++;");
-    } else if (c == '<') {
-      escreveArq(out, "ctr--;");
-    } else if (c == '-') {
-      escreveArq(out, "arr[ctr]--;");
-    } else if (c == '[') {
-      escreveArq(out, "while (arr[ctr] != 0) {");
-    } else if (c == ']') {
-      escreveArq(out, "}");
-    }
+    escrevendo(c, out);
   }
+
+  escreveArq(out, "");
+  escreveArq(out, "return 0;");
+  escreveArq(out, "}");
 
   fclose(input);
   fclose(out);
