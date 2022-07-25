@@ -17,9 +17,11 @@ void boilerplate(FILE *arqOut) {
   escreveArq(arqOut, "#include <stdio.h>");
   escreveArq(arqOut, "");
   escreveArq(arqOut, "int main (void) {");
-  escreveArq(arqOut, "int arr[30000], ctr;");
+  escreveArq(arqOut, "int arr[30000];");
+  escreveArq(arqOut, "int ctr = 0;");
   escreveArq(arqOut, "char letra;");
   escreveArq(arqOut, "");
+  escreveArq(arqOut, "arr[0] = 0;");
 }
 
 /*Fim do arquivo *************************************************************/
@@ -64,14 +66,16 @@ int main(int argc, char *argv[]) {
 
   boilerplate(out);
 
+  // A maior parte da logica reside nesta funçao
+
   while (!feof(input)) {
     c = fgetc(input);
     escrevendo(c, out);
   }
 
-  fclose(input);
-
   boilerplate2(out);
+
+  fclose(input);
   fclose(out);
 
   return 0;
