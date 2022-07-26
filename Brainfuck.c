@@ -3,6 +3,7 @@
 #include <string.h>
 
 const int OPENINGERROR = 1;
+const int NUMNEGATIVO = 0;
 
 #define FLOOP(input)                                                           \
   for (char ch = fgetc(input); !feof(input); ch = fgetc(input))
@@ -17,6 +18,7 @@ void checkFile(FILE *arquivo, char *mensagem) {
 }
 
 /*Nao esta sendo usado ainda *************************************************/
+/*
 int sizeofFile(FILE *arquivo) {
   int size, safesize;
 
@@ -26,6 +28,27 @@ int sizeofFile(FILE *arquivo) {
   // Tamanho incluindo o \n e o \0
   safesize = size + 2;
   return safesize;
+}
+
+*/
+
+// Rewritin p2
+int size(FILE *input) {
+  int ctr, max, min;
+  FLOOP(input) {
+    if (ch == '>')
+      ctr++;
+    else if (ch == '<')
+      ctr--;
+    if (ctr > max)
+      max = ctr;
+    else if (ctr < min)
+      min = ctr;
+  }
+  if (min > NUMNEGATIVO)
+    return max;
+  else
+    return max - min;
 }
 
 // Rewirint stuff
@@ -98,8 +121,6 @@ void escrevendo(char ch, FILE *arq_out) {
 }
 
 int main(int argc, char *argv[]) {
-  char c;
-
   FILE *input = fopen(argv[1], "r");
   checkFile(input, "Arquivo nao encontrado");
 
@@ -110,10 +131,7 @@ int main(int argc, char *argv[]) {
 
   // A maior parte da logica reside neste loop
 
-  while (!feof(input)) {
-    c = fgetc(input);
-    escrevendo(c, out);
-  }
+  FLOOP(input) { escrevendo(ch, out); }
 
   boilerplate2(out);
 
