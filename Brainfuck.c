@@ -28,25 +28,6 @@ int sizeofFile(FILE *arquivo) {
   return safesize;
 }
 
-/*Base do arquivo ************************************************************/
-void boilerplate(FILE *arq_out) {
-  WRITEFILE(arq_out, "#include <stdio.h>");
-  WRITEFILE(arq_out, "");
-  WRITEFILE(arq_out, "int main (void) {");
-  WRITEFILE(arq_out, "int arr[30000];");
-  WRITEFILE(arq_out, "int ctr = 0;");
-  WRITEFILE(arq_out, "char letra;");
-  WRITEFILE(arq_out, "");
-  WRITEFILE(arq_out, "arr[0] = 0;");
-}
-
-/*Fim do arquivo *************************************************************/
-void boilerplate2(FILE *arq_out) {
-  WRITEFILE(arq_out, "");
-  WRITEFILE(arq_out, "return 0;");
-  WRITEFILE(arq_out, "}");
-}
-
 // Rewirint stuff
 unsigned int furtherMostChar(FILE *input, char busca) {
   char ch;
@@ -70,6 +51,24 @@ unsigned int sizeofFileArray(FILE *input) {
   } else {
     return num_left_mov - num_right_mov;
   }
+}
+
+/*Base do arquivo ************************************************************/
+void boilerplate(FILE *arq_out) {
+  WRITEFILE(arq_out, "#include <stdio.h>");
+  WRITEFILE(arq_out, "");
+  WRITEFILE(arq_out, "int main (void) {");
+  fprintf(arq_out, "int arr[%d];\n", sizeofFileArray(arq_out));
+  WRITEFILE(arq_out, "int ctr = 0;");
+  WRITEFILE(arq_out, "char letra;");
+  WRITEFILE(arq_out, "");
+}
+
+/*Fim do arquivo *************************************************************/
+void boilerplate2(FILE *arq_out) {
+  WRITEFILE(arq_out, "");
+  WRITEFILE(arq_out, "return 0;");
+  WRITEFILE(arq_out, "}");
 }
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
