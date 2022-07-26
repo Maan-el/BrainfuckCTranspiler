@@ -47,6 +47,18 @@ void boilerplate2(FILE *arq_out) {
 }
 
 // Rewirint stuff
+unsigned int furtherMostRight(FILE *input) {
+  char ch;
+  unsigned int max;
+
+  while (!feof(input)) {
+    ch = fgetc(input);
+    if (ch == '>') {
+      max++;
+    }
+  }
+  return max;
+}
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
 
