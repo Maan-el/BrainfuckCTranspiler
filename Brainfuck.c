@@ -5,7 +5,27 @@
 int OPENINGERROR = 1;
 
 /*Escrever o \n manualmente e chato ******************************************/
-void WRITEFILE(FILE *arq, char *texto) { fprintf(arq, "%s\n", texto); }
+void WRITEFILE(FILE *arquivo, char *texto) { fprintf(arquivo, "%s\n", texto); }
+
+/*Testa se o arquivo abriu sem nenhum problema *******************************/
+void checkFile(FILE *arquivo, char *mensagem) {
+  if (arquivo == NULL) {
+    fprintf(stderr, "%s\n", mensagem);
+    exit(OPENINGERROR);
+  }
+}
+
+/*Nao esta sendo usado ainda *************************************************/
+int sizeofFile(FILE *arquivo) {
+  int size, safesize;
+
+  while (!feof(arquivo)) {
+    size++;
+  }
+  // Tamanho incluindo o \n e o \0
+  safesize = size + 2;
+  return safesize;
+}
 
 /*Base do arquivo ************************************************************/
 void boilerplate(FILE *arq_out) {
@@ -26,24 +46,7 @@ void boilerplate2(FILE *arq_out) {
   WRITEFILE(arq_out, "}");
 }
 
-/*Testa se o arquivo abriu sem nenhum problema *******************************/
-void checkFile(FILE *arq, char *mensagem) {
-  if (arq == NULL) {
-    fprintf(stderr, "%s\n", mensagem);
-    exit(OPENINGERROR);
-  }
-}
-
-int sizeofFile(FILE *arquivo) {
-  int size, safesize;
-
-  while (!feof(arquivo)) {
-    size++;
-  }
-  // Tamanho incluindo o \n e o \0
-  safesize = size + 2;
-  return safesize;
-}
+// Rewirint stuff
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
 
