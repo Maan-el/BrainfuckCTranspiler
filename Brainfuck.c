@@ -51,31 +51,6 @@ int size(FILE *input) {
     return max - min;
 }
 
-// Rewirint stuff
-unsigned int furtherMostChar(FILE *input, char busca) {
-  char ch;
-  unsigned int max;
-
-  while (!feof(input)) {
-    ch = fgetc(input);
-    if (ch == busca) {
-      max++;
-    }
-  }
-  return max;
-}
-
-unsigned int sizeofFileArray(FILE *input) {
-  const unsigned int num_right_mov = furtherMostChar(input, '>');
-  const unsigned int num_left_mov = furtherMostChar(input, '<');
-
-  if (num_right_mov > num_left_mov) {
-    return num_right_mov - num_left_mov;
-  } else {
-    return num_left_mov - num_right_mov;
-  }
-}
-
 /*Base do arquivo ************************************************************/
 void boilerplate(FILE *arq_out) {
   WRITEFILE(arq_out, "#include <stdio.h>");
