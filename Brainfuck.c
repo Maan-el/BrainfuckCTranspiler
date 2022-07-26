@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 int OPENINGERROR = 1;
 
@@ -58,6 +59,17 @@ unsigned int furtherMostChar(FILE *input, char busca) {
     }
   }
   return max;
+}
+
+unsigned int sizeofFileArray(FILE *input) {
+  unsigned int num_right_mov = furtherMostChar(input, '>');
+  unsigned int num_left_mov = furtherMostChar(input, '<');
+
+  if (num_right_mov > num_left_mov) {
+    return num_right_mov - num_left_mov;
+  } else {
+    return num_left_mov - num_right_mov;
+  }
 }
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
