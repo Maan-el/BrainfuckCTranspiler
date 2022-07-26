@@ -47,13 +47,13 @@ void boilerplate2(FILE *arq_out) {
 }
 
 // Rewirint stuff
-unsigned int furtherMostRight(FILE *input) {
+unsigned int furtherMostChar(FILE *input, char busca) {
   char ch;
   unsigned int max;
 
   while (!feof(input)) {
     ch = fgetc(input);
-    if (ch == '>') {
+    if (ch == busca) {
       max++;
     }
   }
