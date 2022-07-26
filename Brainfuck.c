@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
 
-int OPENINGERROR = 1;
+const int OPENINGERROR = 1;
 
-/*Escrever o \n manualmente e chato ******************************************/
-void WRITEFILE(FILE *arquivo, char *texto) { fprintf(arquivo, "%s\n", texto); }
+#define FLOOP(input)                                                           \
+  for (char ch = fgetc(input); !feof(input); ch = fgetc(input))
+#define WRITEFILE(arquivo, texto) fprintf(arquivo, "%s\n", texto)
 
 /*Testa se o arquivo abriu sem nenhum problema *******************************/
 void checkFile(FILE *arquivo, char *mensagem) {
@@ -43,8 +43,8 @@ unsigned int furtherMostChar(FILE *input, char busca) {
 }
 
 unsigned int sizeofFileArray(FILE *input) {
-  unsigned int num_right_mov = furtherMostChar(input, '>');
-  unsigned int num_left_mov = furtherMostChar(input, '<');
+  const unsigned int num_right_mov = furtherMostChar(input, '>');
+  const unsigned int num_left_mov = furtherMostChar(input, '<');
 
   if (num_right_mov > num_left_mov) {
     return num_right_mov - num_left_mov;
@@ -58,7 +58,9 @@ void boilerplate(FILE *arq_out) {
   WRITEFILE(arq_out, "#include <stdio.h>");
   WRITEFILE(arq_out, "");
   WRITEFILE(arq_out, "int main (void) {");
-  fprintf(arq_out, "int arr[%d];\n", sizeofFileArray(arq_out));
+  WRITEFILE(arq_out, "int arr[30000];");
+  WRITEFILE(arq_out, "arr[0] = 0;");
+  // fprintf(arq_out, "int arr[%d];\n", sizeofFileArray(arq_out));
   WRITEFILE(arq_out, "int ctr = 0;");
   WRITEFILE(arq_out, "char letra;");
   WRITEFILE(arq_out, "");
