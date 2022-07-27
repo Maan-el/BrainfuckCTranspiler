@@ -6,6 +6,9 @@
 const int OPENINGERROR = 1;
 const int NUMNEGATIVO = 0;
 
+// TODO fix amount of repetition
+// TODO accept user input
+
 void WRITEFILE(FILE *arquivo, char *texto) { fprintf(arquivo, "%s\n", texto); }
 /*Testa se o arquivo abriu sem nenhum problema
  * *******************************/

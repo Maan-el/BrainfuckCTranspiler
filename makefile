@@ -7,7 +7,7 @@
 all:
 	gcc Brainfuck.c -W -Wall -std=c11 -pedantic
 	./a.out arq.b
-	#gcc output.c -W -Wall -std=c11 -pedantic -o saida
-	#./saida
+	gcc output.c -W -Wall -std=c11 -pedantic -o saida
+	./saida
 
 # end
