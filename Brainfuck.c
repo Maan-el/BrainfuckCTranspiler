@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 
 const int OPENINGERROR = 1;
 const int NUMNEGATIVO = 0;
 
-#define FLOOP(input)                                                           \
-  for (char ch = fgetc(input); !feof(input); ch = fgetc(input))
-#define WRITEFILE(arquivo, texto) fprintf(arquivo, "%s\n", texto)
-
-/*Testa se o arquivo abriu sem nenhum problema *******************************/
+void WRITEFILE(FILE *arquivo, char *texto) { fprintf(arquivo, "%s\n", texto); }
+/*Testa se o arquivo abriu sem nenhum problema
+ * *******************************/
 void checkFile(FILE *arquivo, char *mensagem) {
   if (arquivo == NULL) {
     fprintf(stderr, "%s\n", mensagem);
@@ -17,25 +16,12 @@ void checkFile(FILE *arquivo, char *mensagem) {
   }
 }
 
-/*Nao esta sendo usado ainda *************************************************/
-/*
-int sizeofFile(FILE *arquivo) {
-  int size, safesize;
-
-  while (!feof(arquivo)) {
-    size++;
-  }
-  // Tamanho incluindo o \n e o \0
-  safesize = size + 2;
-  return safesize;
-}
-
-*/
-
 // Rewritin p2
-int size(FILE *input) {
+int sizeofFileArray(FILE *input) {
   int ctr, max, min;
-  FLOOP(input) {
+  ctr = max = min = 0;
+  char ch = fgetc(input);
+  while (!feof(input)) {
     if (ch == '>')
       ctr++;
     else if (ch == '<')
@@ -44,6 +30,7 @@ int size(FILE *input) {
       max = ctr;
     else if (ctr < min)
       min = ctr;
+    ch = fgetc(input);
   }
   if (min > NUMNEGATIVO)
     return max;
@@ -52,46 +39,51 @@ int size(FILE *input) {
 }
 
 /*Base do arquivo ************************************************************/
-void boilerplate(FILE *arq_out) {
-  WRITEFILE(arq_out, "#include <stdio.h>");
-  WRITEFILE(arq_out, "");
-  WRITEFILE(arq_out, "int main (void) {");
-  WRITEFILE(arq_out, "int arr[30000];");
-  WRITEFILE(arq_out, "arr[0] = 0;");
-  // fprintf(arq_out, "int arr[%d];\n", sizeofFileArray(arq_out));
-  WRITEFILE(arq_out, "int ctr = 0;");
-  WRITEFILE(arq_out, "char letra;");
-  WRITEFILE(arq_out, "");
+void boilerplate(FILE *output) {
+  WRITEFILE(output, "#include <stdio.h>");
+  WRITEFILE(output, "");
+  WRITEFILE(output, "int main (void) {");
+  WRITEFILE(output, "int ctr = 0;");
+  WRITEFILE(output, "char letra;");
+}
+
+void boilerplate2(FILE *output, FILE *input) {
+  fprintf(output, "int arr[%d];", sizeofFileArray(input));
+  WRITEFILE(output, "");
+  WRITEFILE(output, "arr[0] = 0;");
+  WRITEFILE(output, "");
 }
 
 /*Fim do arquivo *************************************************************/
-void boilerplate2(FILE *arq_out) {
-  WRITEFILE(arq_out, "");
-  WRITEFILE(arq_out, "return 0;");
-  WRITEFILE(arq_out, "}");
+void boilerplate3(FILE *output) {
+  WRITEFILE(output, "");
+  WRITEFILE(output, "return 0;");
+  WRITEFILE(output, "}");
 }
 
 // TODO Arrummar duplicaçao de codigo no arquivo final
 
-void escrevendo(char ch, FILE *arq_out) {
+void escrevendo(char ch, FILE *output) {
   if (ch == '+') {
-    WRITEFILE(arq_out, "arr[ctr]++;");
-  } else if (ch == '>') {
-    WRITEFILE(arq_out, "ctr++;");
-  } else if (ch == '<') {
-    WRITEFILE(arq_out, "ctr--;");
+    WRITEFILE(output, "arr[ctr]++;");
   } else if (ch == '-') {
-    WRITEFILE(arq_out, "arr[ctr]--;");
+    WRITEFILE(output, "arr[ctr]--;");
+  } else if (ch == '>') {
+    WRITEFILE(output, "ctr++;");
+  } else if (ch == '<') {
+    WRITEFILE(output, "ctr--;");
   } else if (ch == '[') {
-    WRITEFILE(arq_out, "");
-    WRITEFILE(arq_out, "while (arr[ctr] != 0) {");
+    WRITEFILE(output, "");
+    WRITEFILE(output, "while (arr[ctr] != 0) {");
   } else if (ch == ']') {
-    WRITEFILE(arq_out, "}");
-    WRITEFILE(arq_out, "");
+    WRITEFILE(output, "}");
+    WRITEFILE(output, "");
   } else if (ch == '.') {
-    WRITEFILE(arq_out, "letra = arr[ctr];");
-    WRITEFILE(arq_out, "printf(\"%c\", letra);");
-    WRITEFILE(arq_out, "letra = 'a' - 'a';");
+    WRITEFILE(output, "letra = arr[ctr];");
+    WRITEFILE(output, "printf(\"%c\", letra);");
+    WRITEFILE(output, "");
+    WRITEFILE(output, "letra = 'a' - 'a';");
+    WRITEFILE(output, "");
   }
 }
 
@@ -99,19 +91,24 @@ int main(int argc, char *argv[]) {
   FILE *input = fopen(argv[1], "r");
   checkFile(input, "Arquivo nao encontrado");
 
-  FILE *out = fopen("output.c", "w");
-  checkFile(out, "Erro ao criar o arquivo");
+  FILE *output = fopen("output.c", "w");
+  checkFile(output, "Erro ao criar o arquivo");
 
-  boilerplate(out);
+  boilerplate(output);
+  boilerplate2(output, input);
 
+  rewind(input);
   // A maior parte da logica reside neste loop
+  char ch = fgetc(input);
+  while (!feof(input)) {
+    escrevendo(ch, output);
+    ch = fgetc(input);
+  }
 
-  FLOOP(input) { escrevendo(ch, out); }
-
-  boilerplate2(out);
+  boilerplate3(output);
 
   fclose(input);
-  fclose(out);
+  fclose(output);
 
   return 0;
 }
