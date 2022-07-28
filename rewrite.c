@@ -85,14 +85,43 @@ int numCellsUsed(FILE *input) {
 void fileBegining(FILE *output) {
   FPRINT("#include <stdio.h>", output);
   FPRINT("", output);
+  FPRINT("#define ZERO 'a' - 'a'", output);
+  FPRINT("", output);
   FPRINT("int main (void) {", output);
-  FPRINT("char letra;", output);
+  FPRINT("char letra = ZERO;", output);
 }
 
-/*HACK only way to get both these results is with clones of the samr function*/
-void fileBeginingVariables(FILE *output, FILE *input) {
+/*HACK only way to get both these results is with clones of the same function*/
+void fileBeginingVariables(FILE *input, FILE *output) {
   fprintf(output, "int arr[%d];\n", numCellsUsed(input));
   fprintf(output, "int ctr = %d;\n", ctrPosition(input));
+}
+
+void fileLiteralTranslation(FILE *input, FILE *output, char ch) {
+  if (ch == '+') {
+    FPRINT("arr[ctr]++;", output);
+  } else if (ch == '-') {
+    FPRINT("arr[ctr]--;", output);
+  } else if (ch == '>') {
+    FPRINT("ctr++;", output);
+  } else if (ch == '<') {
+    FPRINT("ctr--;", output);
+  } else if (ch == '[') {
+    FPRINT("", output);
+    FPRINT("while (arr[ctr] != 0) {", output);
+  } else if (ch == ']') {
+    FPRINT("}", output);
+    FPRINT("", output);
+  } else if (ch == '.') {
+    FPRINT("letra = arr[ctr];", output);
+    FPRINT("printf(\"%c\", letra);", output);
+    FPRINT("", output);
+    FPRINT("letra = 'a' - 'a';", output);
+    FPRINT("", output);
+    // TODO probably doesn't work
+  } else if (ch == ',') {
+    FPRINT("fgets(\"%s\",50,stdin);", output);
+  }
 }
 
 void fileEndingFile(FILE *output) {
