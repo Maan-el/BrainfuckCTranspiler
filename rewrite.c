@@ -116,7 +116,7 @@ void fileLiteralTranslation(FILE *output, char ch) {
     FPRINT("letra = arr[ctr];", output);
     FPRINT("printf(\"%c\", letra);", output);
     FPRINT("", output);
-    FPRINT("letra = 'a' - 'a';", output);
+    FPRINT("letra = ZERO;", output);
     FPRINT("", output);
     // TODO probably doesn't work
   } else if (ch == ',') {
