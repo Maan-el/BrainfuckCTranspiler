@@ -83,4 +83,22 @@ int numCellsUsed(FILE *input) {
     return max - min;
 }
 
+void fileBegining(FILE *output) {
+  FPRINT("#include <stdio.h>", output);
+  FPRINT("", output);
+  FPRINT("int main (void) {", output);
+  FPRINT("char letra;", output);
+}
+
+void fileBeginingVariables(FILE *output, FILE *input) {
+  fprintf(output, "int arr[%d];\n", numCellsUsed(input));
+  fprintf(output, "int ctr = %d;\n", ctrPosition(input));
+}
+
+void fileEndingFile(FILE *output) {
+  FPRINT("", output);
+  FPRINT("return 0;", output);
+  FPRINT("}", output);
+}
+
 int main(void) { return 0; }
