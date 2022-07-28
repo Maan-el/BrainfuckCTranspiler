@@ -97,7 +97,7 @@ void fileBeginingVariables(FILE *input, FILE *output) {
   fprintf(output, "int ctr = %d;\n", ctrPosition(input));
 }
 
-void fileLiteralTranslation(FILE *input, FILE *output, char ch) {
+void fileLiteralTranslation(FILE *output, char ch) {
   if (ch == '+') {
     FPRINT("arr[ctr]++;", output);
   } else if (ch == '-') {
@@ -130,4 +130,18 @@ void fileEndingFile(FILE *output) {
   FPRINT("}", output);
 }
 
-int main(void) { return 0; }
+int main(int argc, char *argv[]) {
+  FILE *user_input = fopen(argv[1], "r");
+  checkFile(user_input, "File not found");
+
+  FILE *output = fopen("output.c", " w");
+  checkFile(output, "Error generating output file");
+
+  fileBegining(output);
+  fileBeginingVariables(user_input, output);
+
+  FLOOP(user_input) { fileLiteralTranslation(output, ch); }
+
+  fileEndingFile(output);
+  return 0;
+}
