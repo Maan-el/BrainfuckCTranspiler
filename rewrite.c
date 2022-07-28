@@ -142,6 +142,13 @@ int main(int argc, char *argv[]) {
 
   FLOOP(user_input) { fileLiteralTranslation(output, ch); }
 
+  // Just in case
+  rewind(user_input);
+
   fileEndingFile(output);
+
+  fclose(user_input);
+  fclose(output);
+
   return 0;
 }
