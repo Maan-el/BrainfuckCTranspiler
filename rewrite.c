@@ -7,7 +7,7 @@
 
 #define NORMALSTART 0
 
-#define LEFTSTART(CTR) -CTR;
+#define LEFTSTART(CTR) -CTR
 
 #define LOOP(END) for (int i = 0; i < END; i++)
 
@@ -16,7 +16,7 @@
 
 #define PRINT(STRING) printf("%s\n", STRING);
 
-#define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING);
+#define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
 
 // GET ON WITH IT!
 
