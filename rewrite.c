@@ -36,7 +36,6 @@ int sizeoffile(FILE *input) {
   return num;
 }
 
-/*HACK only way to get both these results is with clones of the same function */
 int ctrPosition(FILE *input) {
   int ctr, max, min;
   ctr = max = min = 0;
@@ -90,6 +89,7 @@ void fileBegining(FILE *output) {
   FPRINT("char letra;", output);
 }
 
+/*HACK only way to get both these results is with clones of the samr function*/
 void fileBeginingVariables(FILE *output, FILE *input) {
   fprintf(output, "int arr[%d];\n", numCellsUsed(input));
   fprintf(output, "int ctr = %d;\n", ctrPosition(input));
