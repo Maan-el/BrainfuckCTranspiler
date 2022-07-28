@@ -101,10 +101,10 @@ int main(int argc, char *argv[]) {
   boilerplate2(output, input);
 
   rewind(input);
-  // A maior parte da logica reside neste loop
+  // A maior parte da logica reside aqui
   char ch = fgetc(input);
   while (!feof(input)) {
-    escrevendo(ch, output);
+    escrevendo(output, input, ch);
     ch = fgetc(input);
   }
 
