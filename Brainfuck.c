@@ -1,3 +1,5 @@
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,17 +26,6 @@ void checkFile(FILE *arquivo, char *error_message) {
     FPRINT(error_message, stderr);
     exit(OPENINGERROR);
   }
-}
-
-int sizeoffile(FILE *input) {
-  int num = 0;
-  while (!feof(input)) {
-    num++;
-  }
-
-  rewind(input);
-
-  return num;
 }
 
 int ctrPosition(FILE *input) {
@@ -133,7 +124,7 @@ void fileEndingFile(FILE *output) {
   FPRINT("}", output);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
   FILE *input = fopen(argv[1], "r");
   checkFile(input, "File not found");
 
@@ -148,9 +139,6 @@ int main(int argc, char *argv[]) {
     fileLiteralTranslation(output, ch);
     ch = fgetc(input);
   }
-
-  // Just in case
-  rewind(input);
 
   fileEndingFile(output);
 
