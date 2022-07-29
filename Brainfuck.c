@@ -82,31 +82,40 @@ void fileBegining(FILE *output) {
 void fileBeginingVariables(FILE *input, FILE *output) {
   fprintf(output, "int arr[%d] = {0};\n", numCellsUsed(input));
   fprintf(output, "int ctr = %d;\n", ctrPosition(input));
+  FPRINT("", output);
 }
 
 void fileLiteralTranslation(FILE *output, char ch) {
-  if (ch == '+') {
+  switch (ch) {
+  case '+':
     FPRINT("arr[ctr]++;", output);
-  } else if (ch == '-') {
+    break;
+  case '-':
     FPRINT("arr[ctr]--;", output);
-  } else if (ch == '>') {
+    break;
+  case '>':
     FPRINT("ctr++;", output);
-  } else if (ch == '<') {
+    break;
+  case '<':
     FPRINT("ctr--;", output);
-  } else if (ch == '[') {
+    break;
+  case '[':
     FPRINT("", output);
     FPRINT("while (arr[ctr] != 0) {", output);
-  } else if (ch == ']') {
+    break;
+  case ']':
     FPRINT("}", output);
     FPRINT("", output);
-  } else if (ch == '.') {
+    break;
+  case '.':
     FPRINT("letra = arr[ctr];", output);
     FPRINT("printf(\"%c\", letra);", output);
     FPRINT("", output);
     FPRINT("letra = ZERO;", output);
     FPRINT("", output);
-    // TODO probably doesn't work
-  } else if (ch == ',') {
+    break;
+  // TODO probably doesn't work
+  case ',':
     FPRINT("fgets(\"%s\",50,stdin);", output);
   }
 }
