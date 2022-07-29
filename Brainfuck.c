@@ -1,30 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
 
-const int OPENINGERROR = 1;
-const int NUMNEGATIVO = 0;
+#define OPENINGERROR 1
 
-// TODO fix amount of repetition
-// TODO accept user input
+#define NUMNEGATIVO -1
 
-void WRITEFILE(FILE *arquivo, char *texto) { fprintf(arquivo, "%s\n", texto); }
-/*Testa se o arquivo abriu sem nenhum problema
- * *******************************/
-void checkFile(FILE *arquivo, char *mensagem) {
-  if (arquivo == NULL) {
-    fprintf(stderr, "%s\n", mensagem);
+#define NORMALSTART 0
+
+#define LEFTSTART(CTR) -CTR
+
+// GET ON WITH IT!
+
+void printtofile(char *frase, FILE *output) { fprintf(output, "%s\n", frase); }
+
+void checkFile(FILE *arquivo, char *error_message) {
+  if (!arquivo) {
+    printtofile(error_message, stderr);
     exit(OPENINGERROR);
   }
 }
 
-// Rewritin p2
-int sizeofFileArray(FILE *input) {
+int ctrPosition(FILE *input) {
   int ctr, max, min;
   ctr = max = min = 0;
-  char ch = fgetc(input);
+
   while (!feof(input)) {
+    char ch = fgetc(input);
     if (ch == '>')
       ctr++;
     else if (ch == '<')
@@ -33,82 +34,108 @@ int sizeofFileArray(FILE *input) {
       max = ctr;
     else if (ctr < min)
       min = ctr;
-    ch = fgetc(input);
   }
+
+  rewind(input);
+
+  if (min > NUMNEGATIVO)
+    return NORMALSTART;
+
+  return LEFTSTART(min);
+}
+
+int numCellsUsed(FILE *input) {
+  int ctr, max, min;
+  ctr = max = min = 0;
+
+  while (!feof(input)) {
+    char ch = fgetc(input);
+    if (ch == '>')
+      ctr++;
+    else if (ch == '<')
+      ctr--;
+    if (ctr > max)
+      max = ctr;
+    else if (ctr < min)
+      min = ctr;
+  }
+
+  rewind(input);
+
   if (min > NUMNEGATIVO)
     return max;
   else
     return max - min;
 }
 
-/*Base do arquivo ************************************************************/
-void boilerplate(FILE *output) {
-  WRITEFILE(output, "#include <stdio.h>");
-  WRITEFILE(output, "");
-  WRITEFILE(output, "int main (void) {");
-  WRITEFILE(output, "int ctr = 0;");
-  WRITEFILE(output, "char letra;");
+void fileBegining(FILE *output) {
+  printtofile("#include <stdio.h>", output);
+  printtofile("", output);
+  printtofile("#define ZERO 'a' - 'a'", output);
+  printtofile("", output);
+  printtofile("int main (void) {", output);
+  printtofile("char letra = ZERO;", output);
 }
 
-void boilerplate2(FILE *output, FILE *input) {
-  fprintf(output, "int arr[%d];", sizeofFileArray(input));
-  WRITEFILE(output, "");
-  WRITEFILE(output, "arr[0] = 0;");
-  WRITEFILE(output, "");
+/*HACK only way to get both these results is with clones of the same function*/
+void fileBeginingVariables(FILE *input, FILE *output) {
+  fprintf(output, "int arr[%d];\n", numCellsUsed(input));
+  fprintf(output, "int ctr = %d;\n", ctrPosition(input));
 }
 
-/*Fim do arquivo *************************************************************/
-void boilerplate3(FILE *output) {
-  WRITEFILE(output, "");
-  WRITEFILE(output, "return 0;");
-  WRITEFILE(output, "}");
-}
-
-// TODO Arrummar duplicaçao de codigo no arquivo final
-
-void escrevendo(char ch, FILE *output) {
+void fileLiteralTranslation(FILE *output, char ch) {
   if (ch == '+') {
-    WRITEFILE(output, "arr[ctr]++;");
+    printtofile("arr[ctr]++;", output);
   } else if (ch == '-') {
-    WRITEFILE(output, "arr[ctr]--;");
+    printtofile("arr[ctr]--;", output);
   } else if (ch == '>') {
-    WRITEFILE(output, "ctr++;");
+    printtofile("ctr++;", output);
   } else if (ch == '<') {
-    WRITEFILE(output, "ctr--;");
+    printtofile("ctr--;", output);
   } else if (ch == '[') {
-    WRITEFILE(output, "");
-    WRITEFILE(output, "while (arr[ctr] != 0) {");
+    printtofile("", output);
+    printtofile("while (arr[ctr] != 0) {", output);
   } else if (ch == ']') {
-    WRITEFILE(output, "}");
-    WRITEFILE(output, "");
+    printtofile("}", output);
+    printtofile("", output);
   } else if (ch == '.') {
-    WRITEFILE(output, "letra = arr[ctr];");
-    WRITEFILE(output, "printf(\"%c\", letra);");
-    WRITEFILE(output, "");
-    WRITEFILE(output, "letra = 'a' - 'a';");
-    WRITEFILE(output, "");
+    printtofile("letra = arr[ctr];", output);
+    printtofile("printf(\"%c\", letra);", output);
+    printtofile("", output);
+    printtofile("letra = ZERO;", output);
+    printtofile("", output);
+    // TODO probably doesn't work
+  } else if (ch == ',') {
+    printtofile("fgets(\"%s\",50,stdin);", output);
   }
+}
+
+void fileEndingFile(FILE *output) {
+  printtofile("", output);
+  printtofile("return 0;", output);
+  printtofile("}", output);
 }
 
 int main(int argc, char *argv[]) {
   FILE *input = fopen(argv[1], "r");
-  checkFile(input, "Arquivo nao encontrado");
+  checkFile(input, "File not found");
 
   FILE *output = fopen("output.c", "w");
-  checkFile(output, "Erro ao criar o arquivo");
+  checkFile(output, "Error generating output file");
 
-  boilerplate(output);
-  boilerplate2(output, input);
+  fileBegining(output);
+  fileBeginingVariables(input, output);
 
-  rewind(input);
-  // A maior parte da logica reside aqui
   char ch = fgetc(input);
   while (!feof(input)) {
-    escrevendo(output, input, ch);
+    fileLiteralTranslation(output, ch);
     ch = fgetc(input);
   }
 
-  boilerplate3(output);
+  // Just in case
+  rewind(input);
+
+  fileEndingFile(output);
 
   fclose(input);
   fclose(output);
