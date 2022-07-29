@@ -24,6 +24,7 @@ void checkFile(FILE *arquivo, char *error_message) {
   }
 }
 
+// Adjusts for progrrams that start to the left instead of right
 int ctrPosition(FILE *input) {
   int ctr, max, min;
   ctr = max = min = 0;
