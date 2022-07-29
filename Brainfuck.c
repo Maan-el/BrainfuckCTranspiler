@@ -10,10 +10,6 @@
 
 #define LEFTSTART(CTR) -CTR
 
-#define LOOP(END) for (int i = 0; i < END; i++)
-
-#define PRINT(STRING) printf("%s\n", STRING);
-
 #define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
 
 // GET ON WITH IT!
