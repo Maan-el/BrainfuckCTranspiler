@@ -84,7 +84,8 @@ void fileBeginingVariables(FILE *input, FILE *output) {
   FPRINT("", output);
 }
 
-void fileLiteralTranslation(FILE *output, char ch) {
+void fileLiteralTranslation(FILE *input, FILE *output) {
+  char ch = fgetc(input);
   switch (ch) {
   case '+':
     FPRINT("arr[ctr]++;", output);
@@ -115,7 +116,7 @@ void fileLiteralTranslation(FILE *output, char ch) {
     break;
   // TODO probably doesn't work
   case ',':
-    FPRINT("fgets(\"%s\",50,stdin);", output);
+    FPRINT("fgets(\"%s\",100,stdin);", output);
   }
 }
 
@@ -135,10 +136,8 @@ int main(int argc, char **argv) {
   fileBegining(output);
   fileBeginingVariables(input, output);
 
-  char ch = fgetc(input);
   while (!feof(input)) {
-    fileLiteralTranslation(output, ch);
-    ch = fgetc(input);
+    fileLiteralTranslation(input, output);
   }
 
   fileEndingFile(output);
