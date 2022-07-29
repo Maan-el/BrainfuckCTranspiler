@@ -3,7 +3,7 @@
 
 #define OPENINGERROR 1
 
-#define NUMNEGATIVO 0
+#define NUMNEGATIVO -1
 
 #define NORMALSTART 0
 
