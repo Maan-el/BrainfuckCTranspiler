@@ -9,7 +9,11 @@
 
 #define LEFTSTART(CTR) -CTR
 
+#define NONEGATIVECELLS(NUM) NUM
+
 #define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
+
+#define HASNEGATIVECELLS(MAX, MIN) MAX + LEFTSTART(MIN)
 
 // GET ON WITH IT!
 
@@ -69,9 +73,9 @@ int numCellsUsed(FILE *input) {
   rewind(input);
 
   if (min > NUMNEGATIVO)
-    return max;
+    return NONEGATIVECELLS(max);
   else
-    return max - min;
+    return HASNEGATIVECELLS(max, min);
 }
 
 void fileBegining(FILE *output) {
