@@ -7,13 +7,13 @@
 
 #define NORMALSTART 0
 
-#define LEFTSTART(CTR) -CTR
+#define LEFTCELLUSED(CTR) -CTR
 
 #define NONEGATIVECELLS(NUM) NUM
 
 #define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
 
-#define HASNEGATIVECELLS(MAX, MIN) MAX + LEFTSTART(MIN)
+#define HASNEGATIVECELLS(MAX, MIN) MAX + LEFTCELLUSED(MIN)
 
 // GET ON WITH IT!
 
@@ -52,7 +52,7 @@ int ctrPosition(FILE *input) {
   if (min > NUMNEGATIVO)
     return NORMALSTART;
 
-  return LEFTSTART(min);
+  return LEFTCELLUSED(min);
 }
 
 int numCellsUsed(FILE *input) {
