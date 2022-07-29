@@ -50,13 +50,19 @@ int numCellsUsed(FILE *input) {
 
   while (!feof(input)) {
     char ch = fgetc(input);
-    if (ch == '>')
+
+    switch (ch) {
+    case '>':
       ctr++;
-    else if (ch == '<')
+      break;
+    case '<':
       ctr--;
-    if (ctr > max)
+      break;
+    }
+
+    if (ctr >= max)
       max = ctr;
-    else if (ctr < min)
+    else
       min = ctr;
   }
 
