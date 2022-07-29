@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,8 +17,6 @@
 #define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
 
 // GET ON WITH IT!
-
-void printtofile(FILE *output, char *frase) { fprintf(output, "%s\n", frase); }
 
 void checkFile(FILE *arquivo, char *error_message) {
   if (!arquivo) {
