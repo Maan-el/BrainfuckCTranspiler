@@ -92,6 +92,7 @@ void fileBeginingVariables(FILE *input, FILE *output) {
 
 void fileLiteralTranslation(FILE *input, FILE *output) {
   char ch = fgetc(input);
+
   switch (ch) {
   case '+':
     FPRINT("arr[ctr]++;", output);
@@ -123,6 +124,7 @@ void fileLiteralTranslation(FILE *input, FILE *output) {
   // TODO probably doesn't work
   case ',':
     FPRINT("fgets(\"%s\",100,stdin);", output);
+    break;
   }
 }
 
