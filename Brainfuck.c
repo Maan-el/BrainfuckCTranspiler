@@ -9,19 +9,37 @@
 
 #define LEFTSTART(CTR) -CTR
 
+#define LOOP(END) for (int i = 0; i < END; i++)
+
+#define PRINT(STRING) printf("%s\n", STRING);
+
+#define FPRINT(STRING, OUTPUT) fprintf(OUTPUT, "%s\n", STRING)
+
 // GET ON WITH IT!
 
-void printtofile(char *frase, FILE *output) { fprintf(output, "%s\n", frase); }
+void printtofile(FILE *output, char *frase) { fprintf(output, "%s\n", frase); }
 
 void checkFile(FILE *arquivo, char *error_message) {
   if (!arquivo) {
-    printtofile(error_message, stderr);
+    FPRINT(error_message, stderr);
     exit(OPENINGERROR);
   }
 }
 
+int sizeoffile(FILE *input) {
+  int num = 0;
+  while (!feof(input)) {
+    num++;
+  }
+
+  rewind(input);
+
+  return num;
+}
+
 int ctrPosition(FILE *input) {
   int ctr, max, min;
+  char ch = fgetc(input);
   ctr = max = min = 0;
 
   while (!feof(input)) {
@@ -69,12 +87,12 @@ int numCellsUsed(FILE *input) {
 }
 
 void fileBegining(FILE *output) {
-  printtofile("#include <stdio.h>", output);
-  printtofile("", output);
-  printtofile("#define ZERO 'a' - 'a'", output);
-  printtofile("", output);
-  printtofile("int main (void) {", output);
-  printtofile("char letra = ZERO;", output);
+  FPRINT("#include <stdio.h>", output);
+  FPRINT("", output);
+  FPRINT("#define ZERO 'a' - 'a'", output);
+  FPRINT("", output);
+  FPRINT("int main (void) {", output);
+  FPRINT("char letra = ZERO;", output);
 }
 
 /*HACK only way to get both these results is with clones of the same function*/
@@ -85,35 +103,35 @@ void fileBeginingVariables(FILE *input, FILE *output) {
 
 void fileLiteralTranslation(FILE *output, char ch) {
   if (ch == '+') {
-    printtofile("arr[ctr]++;", output);
+    FPRINT("arr[ctr]++;", output);
   } else if (ch == '-') {
-    printtofile("arr[ctr]--;", output);
+    FPRINT("arr[ctr]--;", output);
   } else if (ch == '>') {
-    printtofile("ctr++;", output);
+    FPRINT("ctr++;", output);
   } else if (ch == '<') {
-    printtofile("ctr--;", output);
+    FPRINT("ctr--;", output);
   } else if (ch == '[') {
-    printtofile("", output);
-    printtofile("while (arr[ctr] != 0) {", output);
+    FPRINT("", output);
+    FPRINT("while (arr[ctr] != 0) {", output);
   } else if (ch == ']') {
-    printtofile("}", output);
-    printtofile("", output);
+    FPRINT("}", output);
+    FPRINT("", output);
   } else if (ch == '.') {
-    printtofile("letra = arr[ctr];", output);
-    printtofile("printf(\"%c\", letra);", output);
-    printtofile("", output);
-    printtofile("letra = ZERO;", output);
-    printtofile("", output);
+    FPRINT("letra = arr[ctr];", output);
+    FPRINT("printf(\"%c\", letra);", output);
+    FPRINT("", output);
+    FPRINT("letra = 'a' - 'a';", output);
+    FPRINT("", output);
     // TODO probably doesn't work
   } else if (ch == ',') {
-    printtofile("fgets(\"%s\",50,stdin);", output);
+    FPRINT("fgets(\"%s\",50,stdin);", output);
   }
 }
 
 void fileEndingFile(FILE *output) {
-  printtofile("", output);
-  printtofile("return 0;", output);
-  printtofile("}", output);
+  FPRINT("", output);
+  FPRINT("return 0;", output);
+  FPRINT("}", output);
 }
 
 int main(int argc, char *argv[]) {
